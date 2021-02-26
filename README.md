@@ -56,9 +56,8 @@ Sentiment Analysis Using Natural Language Processing
  
  - Veriye ulaşma
  - Veri Analizi
- - Dil tanıma uygulayarak yalnızca ingilizce metinleri seçme
- - Tüm metini küçük harf yapma
- - Noktalama işaretleri, boşluklar ve gereksiz karakterlerden kurtulma
+ - Dil Tanıma
+ - Gereksiz Karakterlerden Kurtulma
  - Stemma ve Lemma uygulama
  - Veriyi x ve y olmak üzere iki verisetine böl ve train ve test değerlerini ayarlama
  - Vectorizer işlemlerini uygulama
@@ -96,6 +95,7 @@ Bize puanların dağılımını gösteren daire grafiğini verir.
 figsize: çizilecek daire grafiğinin genişliği ve boyunu belirler
  `df['stars'].value_counts().plot.pie(autopct='%1.1f%%', startangle=60)`: daire grafiğinin neye göre çizileceğini belirler. Bu örnek için daire dilimi df dataframeinin stars sütunundaki değerlerin dağılımını gösterecektir. 
  
+ 
 ```python
 sns.countplot(df['stars'])
 
@@ -113,6 +113,7 @@ stars
 ```
 Sırasıyla  yıllara ve aylara göre müşteriler tarafından verilen puanların dağılım grafikleri sns yardımıyla çiziliyor.
 
+
 **Dataframe Üzerinden Devam Edelim**
 
 Müşterilerin puanları üzerinde sentiment analizi yapabilmek için puanları 3 -> nötr, 4 ve 5 -> pozitif, 1 ve 2 -> negatif olacak şekilde 3 gruba ayırıyoruz ve bunları yeni oluşturulan 'sentiment' sütununa atıyoruz:
@@ -128,7 +129,8 @@ Veri setinde bize sunulan metin, puan ve sentiment harici diğer değerler işim
 ```python
 yelp= df[['stars', 'sentiment','text']]
 ```
-### Dil Tanıma Uygulayarak Yalnızca İngilizce Metinleri Seçme
+
+### Dil Tanıma 
 
 ```python
 from langdetect import detect
@@ -137,3 +139,4 @@ yelp=yelp[yelp['text'].apply(detect)=='en']
 
 
 
+not: classification algoritmalarını, text verisisni vektörize ettikten sonra textlerin sentiment analizini yapmak için kullanıyoruz. Böylece yeni birisi yorum yaptığı zaman bu yorumun pozitif mi nötr mü negatif mi olduğunu anlayabiliyoruz.  

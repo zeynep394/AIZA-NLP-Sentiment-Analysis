@@ -136,7 +136,34 @@ yelp= df[['stars', 'sentiment','text']]
 from langdetect import detect
 yelp=yelp[yelp['text'].apply(detect)=='en']
 ```
+langdetect kütüphanesinden detect fonksiyonunu indirdiğimizde sadece "en" ingilizce kodlu yorumları seçerek yelp dataframeini düzenliyoruz
 
 
+### Removing Characters
+```python
+yelp['text']=yelp['text'].str.lower()
+yelp['text']=yelp['text'].str.replace('[^\w\s]','')
+yelp['text']=yelp['text'].str.replace('\d+','') #removing numerals 
+yelp['text']=yelp['text'].str.replace('\n',' ').str.replace('\r','')
+```
+
+### Polarity-Subjectivity
+```python
+sentiment_series = yelp['polarity'].tolist()
+#column=['polaarity', 'subjectivity']
+yelp[['polaarity', 'subjectivity']] = pd.DataFrame(sentiment_series,index=yelp.index)
+yelp.drop('polarity', inplace=True, axis=1)
+```
+![Alt text](C:/desktop/pol-sub.png?raw=true "Title")
 
 not: classification algoritmalarını, text verisisni vektörize ettikten sonra textlerin sentiment analizini yapmak için kullanıyoruz. Böylece yeni birisi yorum yaptığı zaman bu yorumun pozitif mi nötr mü negatif mi olduğunu anlayabiliyoruz.  
+
+Getting rid of the punctuation characters, because they behave as the noise inside the text data because they hold no specific semantic meaning.
+Getting rid of the numbers and numerals, because we want to perform a qualitative analysis (positive or negative) instead of any sort of quantitative analysis involving numbers.
+Removing all the words with less than or equal to three characters, because such words can either be stopwords, or they can be the words acting as slang terms.
+Removing stopwords like and, or, of, the, is, am, had, etc. Stopwords are so common, and hold so little semantic information, that their removal is favorable because it not only reduces the dimensionality of the vector-space model, but also increases accuracy in classification in most cases.
+Converting the entire text into lowercase, because a computer is going to interpret “Awesome” and “awesome” as two different terms, because of the difference in the encodings of lowercase and uppercase ‘A’ and ‘a’.
+Applying Porter Stemmer. Stemming is one important phase, because it reduces the words or terms to their roots. For example, the term “faster” gets converted into “fast”, “recommended” to “recommend”, “eating” to “eat”, etc. This helps in retaining the semantic meaning of the sentence while simplifying the repetition.
+Grouping terms by documents.
+Extracting keywords from the grouped terms, because we don’t want every other word to be qualified as a feature. We just consider the most important terms in our dataset, and only keep the qualifying keyword terms.
+Converting extracted keywords into sparse vectors, or what I call “vectorization”.
